@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -32,8 +33,10 @@ func NewClient(user User) (*Client, error) {
 		return nil, err
 	}
 	resp, err := http.Post(url+"/user/login", "application/json", bytes.NewBuffer(jsonData))
-	if err != nil || resp.StatusCode != 200 {
+	if err != nil {
 		return nil, err
+	} else if resp.StatusCode != 200 {
+		return nil, errors.New("picnic api did not return a status 200, are your credentials right?")
 	}
 
 	client := Client{ApiKey: resp.Header["X-Picnic-Auth"][0], url: url}
