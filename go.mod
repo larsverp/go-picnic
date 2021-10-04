@@ -1,3 +1,3 @@
-module github.com/larsverp/go-picnic
+module github.com/larsverp/picnic
 
 go 1.17
