@@ -15,11 +15,6 @@ type User struct {
 	Client_id int    `json:"client_id"`
 }
 
-type Client struct {
-	ApiKey string
-	url    string
-}
-
 const url string = "https://storefront-prod.nl.picnicinternational.com/api/15"
 
 func NewUser(email string, password string) User {
@@ -38,8 +33,9 @@ func NewClient(user User) (*Client, error) {
 	} else if resp.StatusCode != 200 {
 		return nil, errors.New("picnic api did not return a status 200, are your credentials right?")
 	}
+	defer resp.Body.Close()
 
-	client := Client{ApiKey: resp.Header["X-Picnic-Auth"][0], url: url}
+	client := Client{ApiKey: resp.Header["X-Picnic-Auth"][0], Url: url}
 
 	return &client, nil
 }
