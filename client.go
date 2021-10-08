@@ -10,7 +10,7 @@ type Client struct {
 	Url    string
 }
 
-func (cl Client) Get(endpoint string) ([]byte, error) {
+func (cl Client) get(endpoint string) ([]byte, error) {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", cl.Url+endpoint, nil)
 	req.Header.Set("x-picnic-auth", cl.ApiKey)

@@ -20,7 +20,7 @@ type SearchResponse struct {
 
 func (cl Client) SearchProducts(searchQuery string) ([]Product, error) {
 	endpoint := "/search?search_term=" + searchQuery
-	productsRaw, err := cl.Get(endpoint)
+	productsRaw, err := cl.get(endpoint)
 	if err != nil {
 		return nil, err
 	}
