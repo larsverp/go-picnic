@@ -11,11 +11,15 @@ type Product struct {
 	Image_id string `json:"image_id"`
 }
 
-type SearchResponse struct {
+type searchProductsResponse struct {
 	Picnictype string    `json:"type"`
 	Id         string    `json:"id"`
 	Name       string    `json:"name"`
 	Items      []Product `json:"items"`
+}
+
+type getProductByIdResponse struct {
+	ProductDetails Product `json:"product_details"`
 }
 
 func (cl Client) SearchProducts(searchQuery string) ([]Product, error) {
@@ -28,12 +32,32 @@ func (cl Client) SearchProducts(searchQuery string) ([]Product, error) {
 	return toProducts(productsRaw)
 }
 
-func toProducts(productsRaw []byte) ([]Product, error) {
-	var searchResponse []SearchResponse
-
-	err2 := json.Unmarshal(productsRaw, &searchResponse)
-	if err2 != nil {
-		return nil, err2
+func (cl Client) GetProductById(productId string) (*Product, error) {
+	endpoint := "/product/" + productId
+	productRaw, err := cl.get(endpoint)
+	if err != nil {
+		return nil, err
 	}
-	return searchResponse[0].Items, nil
+
+	return toProduct(productRaw)
+}
+
+func toProduct(productRaw []byte) (*Product, error) {
+	var response getProductByIdResponse
+
+	err := json.Unmarshal(productRaw, &response)
+	if err != nil {
+		return nil, err
+	}
+	return &response.ProductDetails, nil
+}
+
+func toProducts(productsRaw []byte) ([]Product, error) {
+	var response []searchProductsResponse
+
+	err := json.Unmarshal(productsRaw, &response)
+	if err != nil {
+		return nil, err
+	}
+	return response[0].Items, nil
 }
