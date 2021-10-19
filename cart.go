@@ -67,5 +67,8 @@ func toCart(cartRaw []byte) (*Cart, error) {
 	if err != nil {
 		return nil, err
 	}
+	for i, item := range response.Items[0].Items {
+		response.Items[0].Items[i].Amount = item.Decorators[0].Quantity
+	}
 	return &response.Items[0], nil
 }

@@ -5,10 +5,16 @@ import (
 )
 
 type Product struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Price    int    `json:"price"`
-	Image_id string `json:"image_id"`
+	Id         string              `json:"id"`
+	Name       string              `json:"name"`
+	Price      int                 `json:"price"`
+	Image_id   string              `json:"image_id"`
+	Amount     int                 `json:"count"`
+	Decorators []quantityDecorator `json:"decorators"`
+}
+
+type quantityDecorator struct {
+	Quantity int `json:"quantity"`
 }
 
 type searchProductsResponse struct {
