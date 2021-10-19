@@ -1,6 +1,8 @@
 package picnic
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type Cart struct {
 	Items []Product `json:"items"`
@@ -18,6 +20,44 @@ func (cl Client) GetCart() (*Cart, error) {
 	}
 	return toCart(cartRaw)
 
+}
+
+func (cl Client) AddToCart(productId string, amount int) error {
+	payload, err := json.Marshal(map[string]interface{}{
+		"product_id": productId,
+		"count":      amount,
+	})
+	if err != nil {
+		return err
+	}
+	_, err2 := cl.post("/cart/add_product", payload)
+	if err2 != nil {
+		return err2
+	}
+	return nil
+}
+
+func (cl Client) RemoveFromCart(productId string, amount int) error {
+	payload, err := json.Marshal(map[string]interface{}{
+		"product_id": productId,
+		"count":      amount,
+	})
+	if err != nil {
+		return err
+	}
+	_, err2 := cl.post("/cart/remove_product", payload)
+	if err2 != nil {
+		return err2
+	}
+	return nil
+}
+
+func (cl Client) ClearCart() error {
+	_, err := cl.post("/cart/clear", nil)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func toCart(cartRaw []byte) (*Cart, error) {

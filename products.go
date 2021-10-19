@@ -22,6 +22,21 @@ type getProductByIdResponse struct {
 	ProductDetails Product `json:"product_details"`
 }
 
+func (product Product) Add(cl Client, amount int) error {
+	err := cl.AddToCart(product.Id, amount)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (product Product) Remove(cl Client, amount int) error {
+	err := cl.RemoveFromCart(product.Id, amount)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (cl Client) SearchProducts(searchQuery string) ([]Product, error) {
 	endpoint := "/search?search_term=" + searchQuery
 	productsRaw, err := cl.get(endpoint)
