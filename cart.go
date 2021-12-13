@@ -18,7 +18,10 @@ func (cl Client) GetCart() (*Cart, error) {
 	if err != nil {
 		return nil, err
 	}
-	return toCart(cartRaw)
+	if len(cartRaw) > 0 {
+		return toCart(cartRaw)
+	}
+	return &Cart{}, nil
 
 }
 
